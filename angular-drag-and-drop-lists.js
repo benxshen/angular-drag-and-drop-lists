@@ -447,6 +447,10 @@
           // Signalize to potential parent lists that a placeholder is already shown.
           event._dndPhShown = true;
         } else {
+
+          // [benx] add dnd-dragleave callback invokation
+          attr.dndDragleave && invokeCallback(attr.dndDragleave, event);
+
           stopDragover();
         }
       });
