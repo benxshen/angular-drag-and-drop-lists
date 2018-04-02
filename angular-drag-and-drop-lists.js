@@ -97,6 +97,10 @@
         // Check whether the element is draggable, since dragstart might be triggered on a child.
         if (element.attr('draggable') == 'false') return true;
 
+        // merge the pull-request: do not start drag if dnd-nodrag && no dnd-handle #432
+        // https://github.com/marceljuenemann/angular-drag-and-drop-lists/pull/432
+        if (element.attr('dnd-nodrag') !== undefined && !event._dndHandle) return false;
+
         // Initialize global state.
         dndState.isDragging = true;
         dndState.itemType = attr.dndType && scope.$eval(attr.dndType).toLowerCase();
