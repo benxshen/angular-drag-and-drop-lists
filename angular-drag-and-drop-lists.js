@@ -352,6 +352,16 @@
         var dropEffect = getDropEffect(event, ignoreDataTransfer);
         if (dropEffect == 'none') return stopDragover();
 
+        // Prevent dragover event callback triggered high freq and it causes CPU busy and UI lage.
+        // Patched by Benx. [Benx 2017-11-10 21:14:34]
+        var lastDragoverTime = element.data('__lastDragoverTime');
+        var now = new Date().getTime();
+        if(lastDragoverTime && (now - lastDragoverTime) < 200) {
+            event.stopPropagation();
+            return false;
+        }
+        element.data('__lastDragoverTime', now);
+
         // At this point we invoke the callback, which still can disallow the drop.
         // We can't do this earlier because we want to pass the index of the placeholder.
         if (attr.dndDragover && !invokeCallback(attr.dndDragover, event, dropEffect, itemType)) {
